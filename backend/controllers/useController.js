@@ -6,14 +6,26 @@ import User from "../models/userModel.js";
 // @route   POST /api/users/auth
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "Auth User" });
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (user && user.matchPasswords(password)) {
+    generateToken(res, user._id);
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
 });
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { name, email, password } = req.body;
 
   const userExists = await User.findOne({
@@ -42,14 +54,16 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
-
-  res.status(200).json({ message: "Register User" });
 });
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 // @access  Public
 const logoutUser = (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
   res.status(200).json({ message: "Logged out successfully" });
 };
 
