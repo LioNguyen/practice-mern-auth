@@ -19,12 +19,6 @@
     "url": "https://github.com/LioNguyen/practice-mern-auth/issues"
   },
   "homepage": "https://github.com/LioNguyen/practice-mern-auth#readme",
-  "_moduleAliases": {
-    "@/*": "./*",
-    "@deep": "src/some/deep/directory/or/file",
-    "@my_module": "lib/some-file.js",
-    "something": "src/foo"
-  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
